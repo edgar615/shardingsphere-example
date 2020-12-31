@@ -1,0 +1,30 @@
+spring:
+  shardingsphere:
+    datasource:
+      names: ds0
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/ds0
+        username: root
+        password: 123456
+    sharding:
+      binding-tables:
+      - user
+      - user_password
+      broadcast-tables:
+      - dict
+      - dict_item
+      tables:
+        user:
+          actual-data-nodes: ds0.user$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: user$->{user_id % 2}
+        user_password:
+          actual-data-nodes: ds0.user_password$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: user_password$->{user_id % 2}
