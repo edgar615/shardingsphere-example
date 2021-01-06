@@ -1,0 +1,44 @@
+spring:
+  shardingsphere:
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds0
+        username: root
+        password: 123456
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds1
+        username: root
+        password: 123456
+    sharding:
+      default-database-strategy:
+        inline:
+          sharding-column: user_id
+          algorithm-expression: ds$->{user_id % 2}
+      binding-tables:
+      - user
+      - user_password
+      broadcast-tables:
+      - dict
+      - dict_item
+      tables:
+        user:
+          actual-data-nodes: ds$->{0..1}.user
+          database-strategy:
+            hint:
+              algorithm-class-name: com.github.edgar615.shaddingsphere.UserIdHintShardingAlgorithm
+          table-strategy:
+            hint:
+              algorithm-class-name: com.github.edgar615.shaddingsphere.UserIdTableHintShardingAlgorithm
+        user_password:
+          actual-data-nodes: ds$->{0..1}.user_password
+          database-strategy:
+            hint:
+              algorithm-class-name: com.github.edgar615.shaddingsphere.UserIdHintShardingAlgorithm
+          table-strategy:
+            hint:
+              algorithm-class-name: com.github.edgar615.shaddingsphere.UserIdTableHintShardingAlgorithm

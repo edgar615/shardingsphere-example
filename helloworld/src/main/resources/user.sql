@@ -20,6 +20,15 @@ create table user_password
    primary key (user_password_id)
 );
 
+create table encrypt_user
+(
+   user_id              bigint not null comment 'id',
+   username             varchar(60) comment '用户名密文',
+   username_plain       varchar(16) comment '用户名明文',
+   password             varchar(60) comment '密码密文',
+   primary key (user_id)
+);
+
 create table dict
 (
    dict_id              bigint not null auto_increment comment '字典ID',

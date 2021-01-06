@@ -1,0 +1,30 @@
+spring:
+  shardingsphere:
+    props:
+      sql:
+        show: true
+    datasource:
+      names: dsmaster,dsslave1,dsslave2
+      dsmaster:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds0
+        username: root
+        password: 123456
+      dsslave2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.132:3306/ds0
+        username: root
+        password: 123456
+      dsslave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.133:3306/ds0
+        username: root
+        password: 123456
+    masterslave:
+      name: rw_test
+      master-data-source-name: dsmaster
+      slave-data-source-names: dsslave1,dsslave2
+      load-balance-algorithm-type: round_robin

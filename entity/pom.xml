@@ -9,29 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>helloworld</artifactId>
+    <artifactId>entity</artifactId>
+
 
     <dependencies>
         <dependency>
             <groupId>com.github.edgar615</groupId>
-            <artifactId>entity</artifactId>
-            <version>${parent.version}</version>
+            <artifactId>spring-boot-util-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4</artifactId>
+            <groupId>com.github.edgar615</groupId>
+            <artifactId>jdbc-codegen</artifactId>
         </dependency>
     </dependencies>
 </project>

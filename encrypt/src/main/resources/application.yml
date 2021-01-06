@@ -1,0 +1,35 @@
+spring:
+  shardingsphere:
+    props:
+      query:
+        with:
+          cipher:
+            column: false
+    datasource:
+      names: dsencrypt
+      dsencrypt:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds0
+        username: root
+        password: 123456
+    encrypt:
+      encryptors:
+        name_encryptor:
+          type: aes
+          props:
+            aes:
+              key:
+                value: 123456
+        pwd_encryptor:
+          type: md5
+      tables:
+        encrypt_user: # 表名
+          columns:
+            username:
+              plain-column: username_plain # 明文列
+              cipher-column: username #加密列
+              encryptor: name_encryptor #加密算法
+            password:
+              cipher-column: password #加密列
+              encryptor: pwd_encryptor #加密算法

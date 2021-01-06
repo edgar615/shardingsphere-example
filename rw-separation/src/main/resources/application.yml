@@ -1,0 +1,65 @@
+spring:
+  shardingsphere:
+    props:
+      sql:
+        show: true
+    datasource:
+      names: dsmaster0, dsmaster1,dsmaster0-dsslave0,dsmaster0-dsslave1,dsmaster1-dsslave0,dsmaster1-dsslave1
+      dsmaster0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds0
+        username: root
+        password: 123456
+      dsmaster1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.131:3306/ds1
+        username: root
+        password: 123456
+      dsmaster0-dsslave0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.132:3306/ds0
+        username: root
+        password: 123456
+      dsmaster0-dsslave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.132:3306/ds1
+        username: root
+        password: 123456
+      dsmaster1-dsslave0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.133:3306/ds0
+        username: root
+        password: 123456
+      dsmaster1-dsslave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.133:3306/ds1
+        username: root
+        password: 123456
+    sharding:
+      default-database-strategy:
+        inline:
+          sharding-column: user_id
+          algorithm-expression: dsmaster$->{user_id % 2}
+      binding-tables:
+        - user
+        - user_password
+      tables:
+        user:
+          actual-data-nodes: dsmaster$->{0..1}.user
+        user_password:
+          actual-data-nodes: dsmaster$->{0..1}.user_password
+      master-slave-rules:
+        dsmaster0:
+          master-data-source-name: dsmaster0
+          slave-data-source-names: dsmaster0-dsslave0,dsmaster0-dsslave1
+          load-balance-algorithm-type: round_robin
+        dsmaster1:
+          master-data-source-name: dsmaster1
+          slave-data-source-names: dsmaster1-dsslave0,dsmaster1-dsslave1
+          load-balance-algorithm-type: round_robin
